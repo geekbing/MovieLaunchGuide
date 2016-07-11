@@ -13,10 +13,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-
-    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        // Override point for customization after application launch.
+    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool
+    {
+        setupRootController()
+        
         return true
+    }
+    
+    func setupRootController()
+    {
+        // 配置本地视频的封面图片和视频路径
+        var images = [UIImage]()
+        var paths = [String]()
+        for i in 0..<4
+        {
+            images.append(UIImage(named: "guide\(i)")!)
+            paths.append(NSBundle.mainBundle().pathForResource("guide\(i)", ofType: "mp4")!)
+        }
+        
+        window = UIWindow(frame: UIScreen.mainScreen().bounds)
+        window?.backgroundColor = UIColor.whiteColor()
+        window?.rootViewController = MovieLaunchGuide(guideImages: images, guideMoviePaths: paths, playFinished: { 
+            [unowned self] in
+            self.window?.rootViewController = UINavigationController(rootViewController: Main())
+        })
+        window?.makeKeyAndVisible()
     }
 
     func applicationWillResignActive(application: UIApplication) {
